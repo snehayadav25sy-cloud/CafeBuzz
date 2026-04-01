@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu | CafeBuzz</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .menu-hero { padding-top: 140px; text-align: center; }
+        .filter-container { display: flex; justify-content: center; gap: 20px; margin: 40px 0; flex-wrap: wrap; }
+        .filter-btn { padding: 10px 24px; border-radius: 100px; background: var(--glass-bg); color: var(--text-secondary); font-weight: 600; cursor: pointer; transition: 0.3s; border: 1px solid var(--glass-border); }
+        .filter-btn.active, .filter-btn:hover { background: var(--accent-color); color: var(--bg-color); border-color: var(--accent-color); }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; margin-bottom: 80px; }
+        .menu-item { padding: 0; text-align: center; transition: 0.3s; overflow: hidden; border-radius: 20px; }
+        .menu-item:hover { transform: translateY(-10px); }
+        .menu-item .img-wrap { width: 100%; height: 200px; overflow: hidden; }
+        .menu-item .img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+        .menu-item:hover .img-wrap img { transform: scale(1.08); }
+        .menu-item .item-body { padding: 18px 20px 20px; }
+        .menu-item h3 { font-size: 19px; margin-bottom: 6px; }
+        .menu-item .price { color: var(--accent-color); font-weight: 700; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar glass">
+        <div class="nav-logo">CafeBuzz</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="about.html" class="nav-link">About Us</a>
+            <a href="menu.html" class="nav-link active">Menu</a>
+            <a href="contact.html" class="nav-link">Our Specials</a>
+        </div>
+        <div class="nav-btns">
+            <a href="contact.html" class="btn-signup">Order Now</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="menu-hero">
+            <h1 class="hero-title">Our Menu</h1>
+            <p class="hero-description" style="margin: 0 auto;">From the finest beans to the most delicate treats, explore our curated selection.</p>
+        </section>
+
+        <section class="filter-container">
+            <button class="filter-btn active" data-category="all">All Items</button>
+            <button class="filter-btn" data-category="coffee">Coffee</button>
+            <button class="filter-btn" data-category="tea">Tea</button>
+            <button class="filter-btn" data-category="snacks">Snacks</button>
+            <button class="filter-btn" data-category="dessert">Desserts</button>
+        </section>
+
+        <section class="menu-grid">
+
+            <!-- COFFEE — all using locally downloaded assets -->
+            <div class="menu-item glass" data-category="coffee">
+                <div class="img-wrap">
+                    <img src="assets/espresso.jpg" alt="Espresso">
+                </div>
+                <div class="item-body">
+                    <h3>Espresso</h3>
+                    <p class="price">₹180</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="coffee">
+                <div class="img-wrap">
+                    <img src="assets/latte.jpg" alt="Cafe Latte">
+                </div>
+                <div class="item-body">
+                    <h3>Cafe Latte</h3>
+                    <p class="price">₹280</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="coffee">
+                <div class="img-wrap">
+                    <img src="assets/cappuccino.jpg" alt="Cappuccino">
+                </div>
+                <div class="item-body">
+                    <h3>Cappuccino</h3>
+                    <p class="price">₹320</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="coffee">
+                <div class="img-wrap">
+                    <img src="assets/mocha.jpg" alt="Caffe Mocha">
+                </div>
+                <div class="item-body">
+                    <h3>Caffe Mocha</h3>
+                    <p class="price">₹350</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="coffee">
+                <div class="img-wrap">
+                    <img src="assets/macchiato.jpg" alt="Iced Caramel Macchiato">
+                </div>
+                <div class="item-body">
+                    <h3>Iced Caramel Macchiato</h3>
+                    <p class="price">₹420</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="coffee">
+                <div class="img-wrap">
+                    <img src="assets/cold_brew.jpg" alt="Cold Brew">
+                </div>
+                <div class="item-body">
+                    <h3>Signature Cold Brew</h3>
+                    <p class="price">₹380</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <!-- TEA -->
+            <div class="menu-item glass" data-category="tea">
+                <div class="img-wrap">
+                    <img src="assets/matcha.jpg" alt="Matcha Green Tea">
+                </div>
+                <div class="item-body">
+                    <h3>Matcha Green Tea</h3>
+                    <p class="price">₹450</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="tea">
+                <div class="img-wrap">
+                    <img src="assets/earl_grey.jpg" alt="Earl Grey">
+                </div>
+                <div class="item-body">
+                    <h3>Classic Earl Grey</h3>
+                    <p class="price">₹220</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="tea">
+                <div class="img-wrap">
+                    <img src="assets/hibiscus.jpg" alt="Hibiscus Iced Tea">
+                </div>
+                <div class="item-body">
+                    <h3>Hibiscus Iced Tea</h3>
+                    <p class="price">₹280</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="tea">
+                <div class="img-wrap">
+                    <img src="assets/chai.jpg" alt="Masala Chai">
+                </div>
+                <div class="item-body">
+                    <h3>Masala Chai</h3>
+                    <p class="price">₹150</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <!-- SNACKS -->
+            <div class="menu-item glass" data-category="snacks">
+                <div class="img-wrap">
+                    <img src="assets/croissant.jpg" alt="Butter Croissant">
+                </div>
+                <div class="item-body">
+                    <h3>Butter Croissant</h3>
+                    <p class="price">₹240</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="snacks">
+                <div class="img-wrap">
+                    <img src="assets/avocado_toast.jpg" alt="Avocado Toast">
+                </div>
+                <div class="item-body">
+                    <h3>Avocado Toast</h3>
+                    <p class="price">₹550</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="snacks">
+                <div class="img-wrap">
+                    <img src="assets/muffin.jpg" alt="Blueberry Muffin">
+                </div>
+                <div class="item-body">
+                    <h3>Blueberry Muffin</h3>
+                    <p class="price">₹210</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="snacks">
+                <div class="img-wrap">
+                    <img src="assets/sliders.jpg" alt="Veggie Sliders">
+                </div>
+                <div class="item-body">
+                    <h3>Veggie Sliders</h3>
+                    <p class="price">₹380</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <!-- DESSERTS -->
+            <div class="menu-item glass" data-category="dessert">
+                <div class="img-wrap">
+                    <img src="assets/cheesecake.jpg" alt="New York Cheesecake">
+                </div>
+                <div class="item-body">
+                    <h3>New York Cheesecake</h3>
+                    <p class="price">₹480</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="dessert">
+                <div class="img-wrap">
+                    <img src="assets/brownie.jpg" alt="Dark Chocolate Brownie">
+                </div>
+                <div class="item-body">
+                    <h3>Dark Chocolate Brownie</h3>
+                    <p class="price">₹250</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="dessert">
+                <div class="img-wrap">
+                    <img src="assets/donut.jpg" alt="Glazed Donuts">
+                </div>
+                <div class="item-body">
+                    <h3>Glazed Donuts (Set of 2)</h3>
+                    <p class="price">₹190</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+            <div class="menu-item glass" data-category="dessert">
+                <div class="img-wrap">
+                    <img src="assets/tiramisu.jpg" alt="Espresso Tiramisu">
+                </div>
+                <div class="item-body">
+                    <h3>Espresso Tiramisu</h3>
+                    <p class="price">₹520</p>
+                    <button class="add-to-cart" style="margin: 12px auto 0;"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="footer container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="nav-logo">CafeBuzz</div>
+                <p>Premium coffee experience delivered to your doorstep. Founded by Praneet Kumar Tiwari.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="menu.html">Menu</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 CafeBuzz. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelector('.filter-btn.active').classList.remove('active');
+                btn.classList.add('active');
+                const category = btn.getAttribute('data-category');
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    if (category === 'all' || item.getAttribute('data-category') === category) {
+                        item.style.display = 'block';
+                        setTimeout(() => item.style.opacity = '1', 10);
+                    } else {
+                        item.style.opacity = '0';
+                        setTimeout(() => item.style.display = 'none', 300);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

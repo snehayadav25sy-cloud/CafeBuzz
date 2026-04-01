@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | CafeBuzz</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .about-hero { padding-top: 140px; text-align: center; }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; padding: 80px 0; }
+        .about-image img { width: 100%; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .about-text h2 { font-size: 40px; margin-bottom: 20px; }
+        .about-text p { color: var(--text-secondary); margin-bottom: 20px; }
+        .owner-section { padding: 80px 0; text-align: center; background: rgba(255, 255, 255, 0.03); border-radius: 30px; margin: 40px 0; }
+        .owner-name { font-family: var(--font-heading); font-size: 36px; color: var(--accent-color); margin-top: 20px; }
+        .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 60px; }
+        .value-card { text-align: center; padding: 40px 20px; }
+        .value-card i { font-size: 32px; color: var(--accent-color); margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar glass">
+        <div class="nav-logo">CafeBuzz</div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="about.html" class="nav-link active">About Us</a>
+            <a href="menu.html" class="nav-link">Menu</a>
+            <a href="contact.html" class="nav-link">Our Specials</a>
+        </div>
+        <div class="nav-btns">
+            <a href="contact.html" class="btn-signup">Order Now</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="about-hero">
+            <h1 class="hero-title">Our Story</h1>
+            <p class="hero-description" style="margin: 0 auto;">Crafting the perfect cup since 2010. Our passion for coffee is matched only by our commitment to quality.</p>
+        </section>
+
+        <section class="about-grid">
+            <div class="about-image">
+                <img src="assets/cafe_interior.jpg" alt="Cafe Interior">
+            </div>
+            <div class="about-text">
+                <h2>Brewed with Passion</h2>
+                <p>CafeBuzz started with a simple mission: to bring the finest, ethically sourced coffee beans to the heart of the city. We believe that coffee is more than just a drink—it's an experience that brings people together.</p>
+                <p>Our team of expert baristas is dedicated to the art of the pour, ensuring that every cup is a masterpiece of flavor and aroma. Whether you're here for a morning jumpstart or a cozy afternoon break, we have the perfect brew waiting for you.</p>
+            </div>
+        </section>
+
+        <section class="owner-section glass">
+            <h2>The Visionary Behind the Brew</h2>
+            <p style="max-width: 700px; margin: 20px auto; color: var(--text-secondary);">"I wanted to create a space where every sip tells a story of quality and craftsmanship."</p>
+            <div class="owner-name">Praneet Kumar Tiwari</div>
+            <p style="color: var(--text-secondary);">Founder & Owner of CafeBuzz</p>
+        </section>
+
+        <section class="values-grid">
+            <div class="value-card glass">
+                <i class="fas fa-leaf"></i>
+                <h3>Ethically Sourced</h3>
+                <p>We work directly with farmers to ensure fair trade and sustainable practices.</p>
+            </div>
+            <div class="value-card glass">
+                <i class="fas fa-fire"></i>
+                <h3>Freshly Roasted</h3>
+                <p>Our beans are roasted in small batches to preserve their unique profile.</p>
+            </div>
+            <div class="value-card glass">
+                <i class="fas fa-heart"></i>
+                <h3>Made with Love</h3>
+                <p>Every cup is prepared with care and precision by our passionate team.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="nav-logo">CafeBuzz</div>
+                <p>Premium coffee experience delivered to your doorstep. Founded by Praneet Kumar Tiwari.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="menu.html">Menu</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 CafeBuzz. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
