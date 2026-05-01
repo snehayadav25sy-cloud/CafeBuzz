@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CafeBuzz | Kitchen Display</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #0d0a09;
+      --surface:  #1a1209;
+      --card:     #1f1510;
+      --border:   rgba(255,255,255,0.08);
+      --accent:   #F5A623;
+      --text:     #f0e8dc;
+      --muted:    rgba(240,232,220,0.5);
+      --green:    #10b981;
+      --yellow:   #f59e0b;
+      --red:      #ef4444;
+      --blue:     #3b82f6;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── TOP BAR ── */
+    .kbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 28px;
+      background: var(--surface);
+      border-bottom: 2px solid var(--accent);
+    }
+    .kbar-left  { display: flex; align-items: center; gap: 16px; }
+    .kbar-logo  { font-size: 22px; font-weight: 900; color: var(--accent); letter-spacing: -0.5px; }
+    .kbar-title { font-size: 16px; font-weight: 600; color: var(--muted); }
+    .kbar-clock { font-size: 22px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+    .kbar-date  { font-size: 13px; color: var(--muted); text-align: right; }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      display: flex; gap: 1px;
+      background: var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-cell  {
+      flex: 1; padding: 14px 20px; background: var(--surface);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .stat-cell i { font-size: 22px; }
+    .stat-val  { font-size: 26px; font-weight: 900; line-height: 1; }
+    .stat-lbl  { font-size: 12px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .c-blue   { color: var(--blue); }
+    .c-yellow { color: var(--yellow); }
+    .c-green  { color: var(--green); }
+    .c-red    { color: var(--red); }
+    .c-accent { color: var(--accent); }
+
+    /* ── MAIN ── */
+    .kds-main {
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      min-height: calc(100vh - 130px);
+    }
+
+    /* ── EMPTY STATE ── */
+    .kds-empty {
+      grid-column: 1/-1; text-align: center;
+      padding: 100px 20px; color: var(--muted);
+    }
+    .kds-empty i { font-size: 64px; display: block; margin-bottom: 20px; opacity: 0.2; }
+    .kds-empty h3 { font-size: 20px; font-weight: 700; }
+
+    /* ── ORDER TICKET ── */
+    .ticket {
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: transform 0.2s, border-color 0.3s;
+      animation: slide-in 0.35s ease;
+    }
+    .ticket:hover { transform: translateY(-3px); }
+
+    @keyframes slide-in { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+    /* timer color states */
+    .ticket.fresh  { border-color: rgba(16,185,129,0.4); }
+    .ticket.warn   { border-color: rgba(245,158,11,0.5); }
+    .ticket.urgent { border-color: rgba(239,68,68,0.6); animation: urgent-pulse 1.5s infinite; }
+    @keyframes urgent-pulse { 0%,100%{ border-color:rgba(239,68,68,0.6); } 50%{ border-color:rgba(239,68,68,1); } }
+
+    /* Ticket header */
+    .ticket-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+    }
+    .ticket-table { font-size: 20px; font-weight: 900; }
+    .ticket-oid   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .ticket-timer {
+      font-size: 24px; font-weight: 900; font-variant-numeric: tabular-nums;
+      padding: 6px 14px; border-radius: 10px;
+    }
+    .fresh  .ticket-timer { color: var(--green);  background: rgba(16,185,129,0.1); }
+    .warn   .ticket-timer { color: var(--yellow); background: rgba(245,158,11,0.1); }
+    .urgent .ticket-timer { color: var(--red);    background: rgba(239,68,68,0.1);  }
+
+    /* Status badge */
+    .ticket-status { text-align: right; }
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 50px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .badge-placed    { background: rgba(59,130,246,0.15); color: var(--blue); }
+    .badge-preparing { background: rgba(245,158,11,0.15); color: var(--yellow); }
+    .badge-ready     { background: rgba(16,185,129,0.15); color: var(--green); }
+
+    /* Items */
+    .ticket-items { padding: 14px 18px; flex: 1; }
+    .titem {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 14px;
+    }
+    .titem:last-child { border: none; }
+    .titem-qty  { width: 28px; height: 28px; background: rgba(245,166,35,0.12); border: 1px solid rgba(245,166,35,0.3); color: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; margin-right: 10px; flex-shrink: 0; }
+    .titem-name { flex: 1; font-weight: 600; }
+    .titem-price{ color: var(--muted); font-size: 13px; }
+
+    /* Notes */
+    .ticket-notes { padding: 0 18px 12px; }
+    .notes-box    { background: rgba(245,166,35,0.06); border: 1px solid rgba(245,166,35,0.2); border-radius: 10px; padding: 10px 12px; font-size: 13px; color: var(--muted); }
+    .notes-box i  { color: var(--accent); margin-right: 6px; }
+
+    /* Total */
+    .ticket-total {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 18px;
+      border-top: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .ticket-total span:last-child { font-weight: 800; color: var(--accent); font-size: 16px; }
+    .ticket-time-label { font-size: 12px; color: var(--muted); }
+
+    /* Actions */
+    .ticket-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--border); }
+    .ticket-actions button {
+      padding: 14px; border: none; cursor: pointer;
+      font-size: 13px; font-weight: 700; transition: 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-prepare { background: rgba(245,158,11,0.12); color: var(--yellow); border-right: 1px solid var(--border); }
+    .btn-prepare:hover { background: rgba(245,158,11,0.25); }
+    .btn-ready   { background: rgba(16,185,129,0.12); color: var(--green); }
+    .btn-ready:hover   { background: rgba(16,185,129,0.25); }
+    .btn-served  { background: rgba(99,102,241,0.12); color: #a78bfa; grid-column: 1/-1; }
+    .btn-served:hover  { background: rgba(99,102,241,0.25); }
+    .btn-disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* Alert bar for new orders */
+    .new-alert {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: var(--green); color: #fff; padding: 10px;
+      text-align: center; font-weight: 800; font-size: 15px;
+      transform: translateY(-100%); transition: transform 0.35s;
+    }
+    .new-alert.show { transform: translateY(0); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- NEW ORDER ALERT -->
+<div class="new-alert" id="new-alert">
+  🔔 New order received!
+</div>
+
+<!-- TOP BAR -->
+<header class="kbar">
+  <div class="kbar-left">
+    <span class="kbar-logo">CafeBuzz</span>
+    <span class="kbar-title">Kitchen Display System</span>
+  </div>
+  <div style="text-align:right">
+    <div class="kbar-clock" id="kds-clock">--:--:--</div>
+    <div class="kbar-date"  id="kds-date"></div>
+  </div>
+</header>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-cell">
+    <i class="fas fa-receipt c-blue"></i>
+    <div><div class="stat-val c-blue" id="s-new">0</div><div class="stat-lbl">New Orders</div></div>
+  </div>
+  <div class="stat-cell">
+    <i class="fas fa-fire-burner c-yellow"></i>
+    <div><div class="stat-val c-yellow" id="s-prep">0</div><div class="stat-lbl">Preparing</div></div>
+  </div>
+  <div class="stat-cell">
+    <i class="fas fa-bell c-green"></i>
+    <div><div class="stat-val c-green" id="s-ready">0</div><div class="stat-lbl">Ready</div></div>
+  </div>
+  <div class="stat-cell">
+    <i class="fas fa-check-double c-accent"></i>
+    <div><div class="stat-val c-accent" id="s-done">0</div><div class="stat-lbl">Served Today</div></div>
+  </div>
+</div>
+
+<!-- KDS GRID -->
+<main class="kds-main" id="kds-grid">
+  <div class="kds-empty">
+    <i class="fas fa-mug-hot"></i>
+    <h3>No Active Orders</h3>
+    <p style="margin-top:8px;font-size:14px">Orders from tables will appear here in real time.</p>
+  </div>
+</main>
+
+<!-- Audio ping (inline oscillator, no file needed) -->
+<script>
+  let audioCtx;
+  function playPing() {
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.type = 'sine'; osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+      osc.start(); osc.stop(audioCtx.currentTime + 0.6);
+    } catch(e) {}
+  }
+</script>
+
+<script src="store.js"></script>
+<script>
+  // ── CLOCK ─────────────────────────────────────────────────
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('kds-clock').textContent = now.toLocaleTimeString();
+    document.getElementById('kds-date').textContent  = now.toLocaleDateString([], { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // ── TIMER DISPLAY ─────────────────────────────────────────
+  function elapsedStr(ts) {
+    const secs = Math.floor((Date.now() - ts) / 1000);
+    const m = Math.floor(secs / 60).toString().padStart(2,'0');
+    const s = (secs % 60).toString().padStart(2,'0');
+    return `${m}:${s}`;
+  }
+  function timerClass(ts) {
+    const mins = (Date.now() - ts) / 60000;
+    if (mins < 5)  return 'fresh';
+    if (mins < 10) return 'warn';
+    return 'urgent';
+  }
+
+  // ── RENDER ────────────────────────────────────────────────
+  function render() {
+    const active = Store.getActiveOrders();
+    const grid   = document.getElementById('kds-grid');
+
+    // Update stats
+    const all = Store.getOrders();
+    const today = new Date().toDateString();
+    document.getElementById('s-new').textContent   = active.filter(o => o.status==='placed').length;
+    document.getElementById('s-prep').textContent  = active.filter(o => o.status==='preparing').length;
+    document.getElementById('s-ready').textContent = active.filter(o => o.status==='ready').length;
+    document.getElementById('s-done').textContent  = all.filter(o => new Date(o.timestamp).toDateString()===today && ['served','billed'].includes(o.status)).length;
+
+    if (active.length === 0) {
+      grid.innerHTML = `<div class="kds-empty"><i class="fas fa-mug-hot"></i><h3>No Active Orders</h3><p style="margin-top:8px;font-size:14px">Orders from tables will appear here in real time.</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = active.map(o => {
+      const tc = timerClass(o.timestamp);
+      const badgeClass = {placed:'badge-placed', preparing:'badge-preparing', ready:'badge-ready'}[o.status];
+      const badgeLabel = {placed:'New', preparing:'Preparing', ready:'Ready!'}[o.status];
+
+      const itemsHtml = o.items.map(i =>
+        `<div class="titem">
+          <span class="titem-qty">${i.qty}</span>
+          <span class="titem-name">${i.name}</span>
+          <span class="titem-price">₹${i.price * i.qty}</span>
+        </div>`).join('');
+
+      const notesHtml = o.notes
+        ? `<div class="ticket-notes"><div class="notes-box"><i class="fas fa-sticky-note"></i>${o.notes}</div></div>`
+        : '';
+
+      const actionsHtml = `
+        <div class="ticket-actions">
+          ${o.status === 'placed'
+            ? `<button class="btn-prepare" onclick="setStatus('${o.id}','preparing')"><i class="fas fa-fire-burner"></i>Start Preparing</button>
+               <button class="btn-ready btn-disabled" disabled><i class="fas fa-bell"></i>Mark Ready</button>`
+            : o.status === 'preparing'
+            ? `<button class="btn-prepare btn-disabled" disabled><i class="fas fa-fire-burner"></i>Preparing...</button>
+               <button class="btn-ready" onclick="setStatus('${o.id}','ready')"><i class="fas fa-bell"></i>Mark Ready</button>`
+            : `<button class="btn-served" onclick="setStatus('${o.id}','served')"><i class="fas fa-check-double"></i>Mark as Served</button>
+               <div></div>`
+          }
+        </div>`;
+
+      return `
+        <div class="ticket ${tc}" id="ticket-${o.id}">
+          <div class="ticket-head">
+            <div>
+              <div class="ticket-table">Table ${o.tableId}</div>
+              <div class="ticket-oid">${o.id} · ${o.placedAt}</div>
+            </div>
+            <div class="ticket-status">
+              <span class="badge ${badgeClass}">${badgeLabel}</span>
+              <div class="ticket-timer" data-ts="${o.timestamp}">${elapsedStr(o.timestamp)}</div>
+            </div>
+          </div>
+          <div class="ticket-items">${itemsHtml}</div>
+          ${notesHtml}
+          <div class="ticket-total">
+            <span class="ticket-time-label">Ordered at ${o.placedAt}</span>
+            <span>₹${o.total}</span>
+          </div>
+          ${actionsHtml}
+        </div>`;
+    }).join('');
+  }
+
+  // ── ACTIONS ───────────────────────────────────────────────
+  function setStatus(orderId, status) {
+    Store.updateOrderStatus(orderId, status);
+    render();
+  }
+
+  // ── TIMER TICK ────────────────────────────────────────────
+  setInterval(() => {
+    document.querySelectorAll('.ticket-timer[data-ts]').forEach(el => {
+      const ts = parseInt(el.dataset.ts);
+      el.textContent = elapsedStr(ts);
+      const ticket = el.closest('.ticket');
+      const cls = timerClass(ts);
+      ticket.className = `ticket ${cls}`;
+    });
+  }, 1000);
+
+  // ── LIVE UPDATES ──────────────────────────────────────────
+  Store.onUpdate(msg => {
+    if (msg.type === 'NEW_ORDER') {
+      playPing();
+      // Flash alert
+      const alert = document.getElementById('new-alert');
+      alert.textContent = `🔔 New order! Table ${msg.tableId} — ${msg.order.id}`;
+      alert.classList.add('show');
+      setTimeout(() => alert.classList.remove('show'), 3500);
+    }
+    render();
+  });
+
+  // ── INITIAL RENDER ────────────────────────────────────────
+  render();
+  // Refresh every 5s as fallback
+  setInterval(render, 5000);
+</script>
+</body>
+</html>

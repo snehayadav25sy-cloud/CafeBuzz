@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CafeBuzz | Welcome</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #0d0a09;
+      --card:   #1a1209;
+      --accent: #F5A623;
+      --text:   #f0e8dc;
+      --muted:  rgba(240,232,220,0.5);
+      --green:  #10b981;
+      --border: rgba(255,255,255,0.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding-bottom: 40px;
+    }
+
+    /* Animated background blobs */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.12;
+      animation: float 8s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 { width: 500px; height: 500px; background: #F5A623; top: -150px; left: -150px; animation-delay: 0s; }
+    .blob-2 { width: 400px; height: 400px; background: #10b981; bottom: -120px; right: -100px; animation-delay: 3s; }
+    .blob-3 { width: 300px; height: 300px; background: #8b5cf6; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 5s; }
+    @keyframes float {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-30px) scale(1.05); }
+    }
+
+    /* CONTENT */
+    .portal-wrap {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column;
+      align-items: center; text-align: center;
+      max-width: 860px; width: 100%;
+    }
+
+    .logo {
+      font-size: 38px; font-weight: 900;
+      color: var(--accent); letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+    .logo span { color: var(--text); }
+
+    .tagline {
+      font-size: 15px; color: var(--muted);
+      margin-bottom: 56px; letter-spacing: 0.3px;
+    }
+
+    .welcome-text {
+      font-size: 28px; font-weight: 800;
+      margin-bottom: 10px; line-height: 1.2;
+    }
+    .welcome-sub {
+      font-size: 15px; color: var(--muted);
+      margin-bottom: 48px;
+    }
+
+    /* CARDS */
+    .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; width: 100%; }
+
+    .portal-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      display: flex; flex-direction: column; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .portal-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .portal-card.customer::before { background: radial-gradient(circle at top left, rgba(245,166,35,0.08), transparent 70%); }
+    .portal-card.staff::before    { background: radial-gradient(circle at top left, rgba(16,185,129,0.08), transparent 70%); }
+
+    .portal-card:hover { transform: translateY(-8px); }
+    .portal-card.customer:hover { border-color: rgba(245,166,35,0.6); box-shadow: 0 20px 60px rgba(245,166,35,0.12); }
+    .portal-card.staff:hover    { border-color: rgba(16,185,129,0.6);  box-shadow: 0 20px 60px rgba(16,185,129,0.12); }
+    .portal-card.customer:hover::before { opacity: 1; }
+    .portal-card.staff:hover::before    { opacity: 1; }
+
+    .card-icon {
+      width: 80px; height: 80px; border-radius: 22px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 34px; margin-bottom: 24px;
+      transition: transform 0.3s;
+    }
+    .portal-card:hover .card-icon { transform: scale(1.1) rotate(-5deg); }
+    .customer .card-icon { background: rgba(245,166,35,0.12); color: var(--accent); border: 1px solid rgba(245,166,35,0.25); }
+    .staff    .card-icon { background: rgba(16,185,129,0.12); color: var(--green);  border: 1px solid rgba(16,185,129,0.25); }
+
+    .card-title { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+    .card-desc  { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+
+    .card-features {
+      list-style: none; text-align: left; width: 100%;
+      display: flex; flex-direction: column; gap: 10px;
+      margin-bottom: 32px;
+    }
+    .card-features li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--muted);
+    }
+    .card-features li i { font-size: 12px; width: 20px; text-align: center; }
+    .customer .card-features li i { color: var(--accent); }
+    .staff    .card-features li i { color: var(--green); }
+
+    .card-btn {
+      width: 100%; padding: 14px;
+      border: none; border-radius: 14px;
+      font-size: 15px; font-weight: 800;
+      cursor: pointer; transition: 0.25s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .customer .card-btn { background: var(--accent); color: #120D0B; }
+    .customer .card-btn:hover { background: #e09520; }
+    .staff    .card-btn { background: var(--green); color: #fff; }
+    .staff    .card-btn:hover { background: #0da271; }
+
+    /* STAFF SUBMENU */
+    .staff-submenu {
+      display: none;
+      position: absolute; bottom: -160px; left: 0; right: 0;
+      background: #1f1a10;
+      border: 1px solid rgba(16,185,129,0.3);
+      border-radius: 16px;
+      padding: 16px;
+      z-index: 10;
+      flex-direction: column; gap: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .staff-submenu.visible { display: flex; }
+    .sub-link {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      text-decoration: none; color: var(--text);
+      font-size: 14px; font-weight: 600;
+      transition: 0.2s;
+    }
+    .sub-link:hover { background: rgba(16,185,129,0.1); color: var(--green); }
+    .sub-link i { width: 20px; text-align: center; color: var(--green); }
+
+    /* FOOTER */
+    .portal-footer {
+      margin-top: 40px; font-size: 12px; color: var(--muted);
+      position: relative; z-index: 1;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      .cards { grid-template-columns: 1fr; }
+      .welcome-text { font-size: 22px; }
+      .logo { font-size: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- BG BLOBS -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<div class="portal-wrap">
+
+  <div class="logo">Cafe<span>Buzz</span></div>
+  <p class="tagline">Cleveland's finest coffee experience</p>
+
+  <h1 class="welcome-text">Welcome! How would you like to continue?</h1>
+  <p class="welcome-sub">Choose the experience that fits you best.</p>
+
+  <div class="cards">
+
+    <!-- CUSTOMER CARD -->
+    <a href="index.html" class="portal-card customer">
+      <div class="card-icon"><i class="fas fa-mug-hot"></i></div>
+      <div class="card-title">I'm a Customer</div>
+      <p class="card-desc">Browse our full menu, explore our story, and find us on the map.</p>
+      <ul class="card-features">
+        <li><i class="fas fa-check"></i> Browse our full menu</li>
+        <li><i class="fas fa-check"></i> Explore specials & offers</li>
+        <li><i class="fas fa-check"></i> About us & our story</li>
+        <li><i class="fas fa-check"></i> Contact & location</li>
+      </ul>
+      <button class="card-btn"><i class="fas fa-arrow-right"></i> Visit Website</button>
+    </a>
+
+    <!-- STAFF CARD -->
+    <a href="admin.html" class="portal-card staff" id="staff-card">
+      <div class="card-icon"><i class="fas fa-utensils"></i></div>
+      <div class="card-title">I'm a Staff Member</div>
+      <p class="card-desc">Access the in-store system — manage tables, kitchen display, and orders.</p>
+      <ul class="card-features">
+        <li><i class="fas fa-check"></i> Live floor & table management</li>
+        <li><i class="fas fa-check"></i> Kitchen display system</li>
+        <li><i class="fas fa-check"></i> Revenue & order analytics</li>
+        <li><i class="fas fa-check"></i> Table QR code generator</li>
+      </ul>
+      <button class="card-btn" id="staff-btn"><i class="fas fa-lock-open"></i> Enter Staff Area</button>
+    </a>
+
+  </div>
+
+  <!-- DINE-IN SHORTCUT -->
+  <div style="margin-top:28px;z-index:1;position:relative;">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Sitting at a table? Scan the QR code or go directly:</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+      <a href="table.html?table=1" style="padding:8px 18px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:50px;color:var(--accent);text-decoration:none;font-size:13px;font-weight:700;transition:0.2s;" onmouseover="this.style.background='rgba(245,166,35,0.2)'" onmouseout="this.style.background='rgba(245,166,35,0.1)'">Table 1</a>
+      <a href="table.html?table=2" style="padding:8px 18px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:50px;color:var(--accent);text-decoration:none;font-size:13px;font-weight:700;transition:0.2s;" onmouseover="this.style.background='rgba(245,166,35,0.2)'" onmouseout="this.style.background='rgba(245,166,35,0.1)'">Table 2</a>
+      <a href="table.html?table=3" style="padding:8px 18px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:50px;color:var(--accent);text-decoration:none;font-size:13px;font-weight:700;transition:0.2s;" onmouseover="this.style.background='rgba(245,166,35,0.2)'" onmouseout="this.style.background='rgba(245,166,35,0.1)'">Table 3</a>
+      <a href="table.html?table=4" style="padding:8px 18px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:50px;color:var(--accent);text-decoration:none;font-size:13px;font-weight:700;transition:0.2s;" onmouseover="this.style.background='rgba(245,166,35,0.2)'" onmouseout="this.style.background='rgba(245,166,35,0.1)'">Table 4</a>
+      <a href="table.html?table=5" style="padding:8px 18px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:50px;color:var(--accent);text-decoration:none;font-size:13px;font-weight:700;transition:0.2s;" onmouseover="this.style.background='rgba(245,166,35,0.2)'" onmouseout="this.style.background='rgba(245,166,35,0.1)'">Table 5</a>
+      <a href="table.html?table=6" style="padding:8px 18px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:50px;color:var(--accent);text-decoration:none;font-size:13px;font-weight:700;transition:0.2s;" onmouseover="this.style.background='rgba(245,166,35,0.2)'" onmouseout="this.style.background='rgba(245,166,35,0.1)'">Table 6</a>
+      <a href="table.html?table=7" style="padding:8px 18px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:50px;color:var(--accent);text-decoration:none;font-size:13px;font-weight:700;transition:0.2s;" onmouseover="this.style.background='rgba(245,166,35,0.2)'" onmouseout="this.style.background='rgba(245,166,35,0.1)'">Table 7</a>
+      <a href="table.html?table=8" style="padding:8px 18px;background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);border-radius:50px;color:var(--accent);text-decoration:none;font-size:13px;font-weight:700;transition:0.2s;" onmouseover="this.style.background='rgba(245,166,35,0.2)'" onmouseout="this.style.background='rgba(245,166,35,0.1)'">Table 8</a>
+    </div>
+  </div>
+
+  <p class="portal-footer">© 2024 CafeBuzz · Founded by Praneet Kumar Tiwari · Cleveland, OH</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CafeBuzz | QR Code Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- QR Code library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+    *{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#0d0a09;--surface:#141009;--card:#1a1209;--border:rgba(255,255,255,0.08);--accent:#F5A623;--text:#f0e8dc;--muted:rgba(240,232,220,0.5);}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+    /* TOP BAR */
+    .qbar{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:var(--surface);border-bottom:2px solid var(--accent);}
+    .qbar-logo{font-size:22px;font-weight:900;color:var(--accent);}
+    .back-btn{text-decoration:none;color:var(--muted);font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;transition:0.2s;}
+    .back-btn:hover{color:var(--accent);}
+
+    /* HEADER */
+    .qr-hero{text-align:center;padding:48px 24px 32px;}
+    .qr-hero h1{font-size:32px;font-weight:900;margin-bottom:10px;}
+    .qr-hero p{color:var(--muted);font-size:15px;max-width:480px;margin:0 auto;}
+
+    /* BASE URL INPUT */
+    .url-section{max-width:600px;margin:0 auto 36px;padding:0 24px;}
+    .url-label{font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:600;}
+    .url-input-wrap{display:flex;gap:10px;}
+    .url-input{flex:1;padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:var(--text);font-family:inherit;font-size:14px;}
+    .url-input:focus{outline:none;border-color:var(--accent);}
+    .gen-btn{padding:12px 24px;background:var(--accent);color:#120D0B;border:none;border-radius:10px;font-weight:800;font-size:14px;cursor:pointer;white-space:nowrap;transition:0.2s;}
+    .gen-btn:hover{background:#e09520;}
+
+    /* QR GRID */
+    .qr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:24px;padding:0 28px 60px;max-width:1200px;margin:0 auto;}
+    .qr-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px 20px;text-align:center;transition:0.25s;}
+    .qr-card:hover{transform:translateY(-4px);border-color:rgba(245,166,35,0.35);}
+    .qr-card-num{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+    .qr-box{background:white;border-radius:12px;padding:12px;margin:0 auto 14px;width:fit-content;display:flex;align-items:center;justify-content:center;}
+    .qr-card h3{font-size:18px;font-weight:800;margin-bottom:4px;}
+    .qr-card p{font-size:12px;color:var(--muted);margin-bottom:14px;word-break:break-all;}
+    .qr-card-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .qr-btn-open{padding:9px;background:rgba(245,166,35,0.12);border:1px solid var(--accent);color:var(--accent);border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;transition:0.2s;}
+    .qr-btn-open:hover{background:rgba(245,166,35,0.25);}
+    .qr-btn-print{padding:9px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text);border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:0.2s;}
+    .qr-btn-print:hover{background:rgba(255,255,255,0.1);}
+
+    /* PRINT STYLES */
+    @media print{
+      body{background:#fff;color:#000;}
+      .qbar,.url-section,.qr-hero,.qr-btn-open,.qr-btn-print{display:none!important;}
+      .qr-grid{grid-template-columns:repeat(4,1fr);padding:0;}
+      .qr-card{border:1px solid #ddd;break-inside:avoid;page-break-inside:avoid;}
+      .qr-card h3,.qr-card-num{color:#000;}
+      .qr-card p{color:#555;}
+    }
+  </style>
+</head>
+<body>
+
+<header class="qbar">
+  <span class="qbar-logo">CafeBuzz</span>
+  <a href="admin.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+</header>
+
+<div class="qr-hero">
+  <h1>🔲 Table QR Codes</h1>
+  <p>Print and place these QR codes on each table. Customers scan them to open the ordering screen instantly.</p>
+</div>
+
+<div class="url-section">
+  <div class="url-label">Base URL (where your site is hosted)</div>
+  <div class="url-input-wrap">
+    <input type="text" class="url-input" id="base-url" value="" placeholder="e.g. http://127.0.0.1:5500/table.html">
+    <button class="gen-btn" id="gen-btn"><i class="fas fa-rotate"></i> Generate</button>
+  </div>
+</div>
+
+<div class="qr-grid" id="qr-grid"></div>
+
+<script>
+  const TABLES = 8;
+  let baseUrl = '';
+
+  function getDefaultUrl() {
+    const loc = window.location;
+    return loc.origin + loc.pathname.replace('qr.html','') + 'table.html';
+  }
+
+  function generateQRs() {
+    baseUrl = document.getElementById('base-url').value.trim() || getDefaultUrl();
+    // Remove ?table=... if already included
+    baseUrl = baseUrl.split('?')[0];
+    document.getElementById('base-url').value = baseUrl;
+
+    const grid = document.getElementById('qr-grid');
+    grid.innerHTML = '';
+
+    for (let i = 1; i <= TABLES; i++) {
+      const url = `${baseUrl}?table=${i}`;
+
+      const card = document.createElement('div');
+      card.className = 'qr-card';
+      card.innerHTML = `
+        <div class="qr-card-num">Table ${i}</div>
+        <div class="qr-box" id="qr-${i}"></div>
+        <h3>Table ${i}</h3>
+        <p>${url}</p>
+        <div class="qr-card-btns">
+          <a href="${url}" target="_blank" class="qr-btn-open"><i class="fas fa-external-link-alt"></i> Open</a>
+          <button class="qr-btn-print" onclick="printTable(${i})"><i class="fas fa-print"></i> Print</button>
+        </div>`;
+      grid.appendChild(card);
+
+      new QRCode(document.getElementById(`qr-${i}`), {
+        text: url,
+        width: 160,
+        height: 160,
+        colorDark: '#120D0B',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+  }
+
+  function printTable(num) {
+    const url = `${baseUrl}?table=${num}`;
+    const win = window.open('', '_blank');
+    // Get QR image
+    const qrEl = document.querySelector(`#qr-${num} img`) || document.querySelector(`#qr-${num} canvas`);
+    let imgSrc = '';
+    if (qrEl && qrEl.tagName === 'IMG') imgSrc = qrEl.src;
+    else if (qrEl && qrEl.tagName === 'CANVAS') imgSrc = qrEl.toDataURL();
+
+    win.document.write(`
+      <html><head><title>Table ${num} QR</title>
+      <style>
+        body{font-family:sans-serif;text-align:center;padding:40px;}
+        img{width:200px;height:200px;margin:20px auto;display:block;}
+        h1{font-size:32px;margin-bottom:8px;}
+        p{color:#555;font-size:14px;}
+        .url{font-size:11px;color:#999;margin-top:8px;word-break:break-all;}
+        .logo{font-size:18px;font-weight:900;color:#F5A623;margin-bottom:24px;}
+        .border{border:2px dashed #F5A623;padding:30px;border-radius:16px;max-width:280px;margin:0 auto;}
+      </style></head><body>
+      <div class="border">
+        <div class="logo">☕ CafeBuzz</div>
+        <img src="${imgSrc}" alt="QR Code">
+        <h1>Table ${num}</h1>
+        <p>Scan to view menu & order</p>
+        <div class="url">${url}</div>
+      </div>
+      <script>window.onload=()=>{window.print();window.close();}<\/script>
+      </body></html>`);
+    win.document.close();
+  }
+
+  document.getElementById('gen-btn').addEventListener('click', generateQRs);
+  // Auto-generate on load
+  generateQRs();
+</script>
+</body>
+</html>
